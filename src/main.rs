@@ -4,6 +4,7 @@ use bevy::window::WindowResized;
 
 mod css;
 mod html;
+mod patch;
 
 // non-exhaustive list of missing features
 // - ImageBundle: no alt text on images
