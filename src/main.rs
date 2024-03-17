@@ -6,12 +6,15 @@ mod css;
 mod html;
 mod patch;
 
-// non-exhaustive list of missing features
-// - ImageBundle: no alt text on images
-// - ImageBundle: no native SVG support in Bevy
-// - TextStyle: font_size cannot be specified in rem, only px
-// - TextStyle: has no font_weight property, no letter_spacing property
-// - NodeBundle: has no block or none options for display (https://www.w3schools.com/css/css_display_visibility.asp)
+// FIXME non-exhaustive list of missing features in Bevy
+//  - ImageBundle: no alt text on images, no native SVG support, cannot change brightness like when using CSS
+//  - TextStyle: font_size cannot be specified in rem (only px), has no font_weight property, no letter_spacing property
+//  - NodeBundle: has no block or none options for display (https://www.w3schools.com/css/css_display_visibility.asp)
+//  - UiBorderRadius: no border-radius property
+
+// FIXME in-progress Bevy Issues / PRs
+//  - to add SVG support: https://github.com/bevyengine/bevy/issues/1139
+//  - to add border-radius: https://github.com/bevyengine/bevy/pull/8973
 
 #[derive(Component)]
 // <a href="...">
@@ -69,7 +72,7 @@ fn startup(
     images.bevy_logo_dark = asset_server.load("bevy_logo_dark.png");
     images.heart = asset_server.load("heart.png");
 
-    // FIXME cannot change brightness of images like in CSS, so there is no hover effect on this
+    // FIXME cannot change brightness of images in Bevy like in CSS, so there is no hover effect on this
     images.github_mark_white = asset_server.load("github-mark-white.png");
 
     // 500 font weight == Medium, according to https://fonts.google.com/specimen/Fira+Sans

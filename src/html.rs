@@ -64,7 +64,7 @@ pub(crate) fn text(
             style: Style::cascade(css, &classes),
             text: Text::from_section(
                 text,
-                bundle.text.sections[0].clone().style // FIXME clunky to get style out of TextBundle
+                bundle.text.sections[0].clone().style // clunky to get style out of TextBundle
             ),
             ..bundle
         },

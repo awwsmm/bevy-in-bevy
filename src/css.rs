@@ -25,13 +25,13 @@ impl Default for CSS {
     fn default() -> Self {
         Self {
             rem: 19.5,
-            header_message_font_size: 1.3 * 19.5, // FIXME 1.3 * rem
+            header_message_font_size: 1.3 * 19.5, // default: 1.3 * rem
             logo_height: Val::Px(28.),
             header_height: Val::Px(60.),
             header_padding: UiRect::right(Val::Px(8.)),
             fira_sans: Handle::default(),
             github_img_height: Val::Px(35.),
-            main_menu_link_font_size: 1.3 * 19.5, // FIXME 1.3 * rem
+            main_menu_link_font_size: 1.3 * 19.5, // default: 1.3 * rem
         }
     }
 }
@@ -282,11 +282,12 @@ impl CSS {
                 //     background-color: #4a6e91;
                 //     border: 3px solid #6a8fb3;
                 //     padding: 6px 8px;
-                //     border-radius: 10px; // FIXME Bevy doesn't yet support border-radius, see: https://github.com/bevyengine/bevy/pull/8973
+                //     border-radius: 10px;
                 //     font-size: 1.2rem;
                 //     font-weight: 500;
                 //     transition: transform 100ms;
                 // }
+                // FIXME Bevy doesn't yet support border-radius, see: https://github.com/bevyengine/bevy/pull/8973
                 Styles {
                     style: Style {
                         align_items: AlignItems::Center,
@@ -307,7 +308,7 @@ impl CSS {
                 // }
                 Styles {
                     style: Style {
-                        height: Val::Px(1.1 * 17.4), // TODO define em
+                        height: Val::Px(1.1 * 17.4), // TODO define em as 17.4
                         margin: UiRect::left(Val::Px(0.2 * self.rem)),
                         ..default()
                     },
@@ -336,8 +337,7 @@ impl CSS {
                 //     font-weight: 500;
                 //     transition: transform 100ms;
                 // }
-                // FIXME Bevy doesn't yet support border-radius
-                //       see: https://github.com/bevyengine/bevy/pull/8973
+                // FIXME Bevy doesn't yet support border-radius, see: https://github.com/bevyengine/bevy/pull/8973
                 Styles {
                     text: TextBundle {
                         text: Text::from_section(
@@ -509,12 +509,6 @@ pub(crate) fn button_pink_hover(
         }
     }
 }
-
-/*
-.header__cta--github:hover {
-    filter: brightness(80%);
-}
- */
 
 // ---
 
