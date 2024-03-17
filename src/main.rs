@@ -49,7 +49,7 @@ fn main() {
         .insert_resource(css::CSS::default())
         .add_systems(Startup, startup)
         .add_systems(Update, (despawn, css::recalculate, render).chain())
-        .add_systems(Update, (css::a_hover, css::main_menu_link_hover))
+        .add_systems(Update, (css::a_hover, css::main_menu_link_hover, css::button_pink_hover))
         .run();
 }
 
@@ -68,6 +68,8 @@ fn startup(
     // load() them once in setup() so we don't need to load() every Update schedule
     images.bevy_logo_dark = asset_server.load("bevy_logo_dark.png");
     images.heart = asset_server.load("heart.png");
+
+    // FIXME cannot change brightness of images like in CSS, so there is no hover effect on this
     images.github_mark_white = asset_server.load("github-mark-white.png");
 
     // 500 font weight == Medium, according to https://fonts.google.com/specimen/Fira+Sans

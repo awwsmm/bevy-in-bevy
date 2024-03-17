@@ -1,8 +1,7 @@
 use bevy::prelude::*;
-use bevy::text::{BreakLineOn, TextLayoutInfo};
 use bevy::window::WindowResized;
 
-use crate::{css, Link, when_debugging};
+use crate::{Link, when_debugging};
 use crate::patch::Patch;
 
 // cannot apply multiple components of the same type to a single entity, so group Vec<Class> into Classes
@@ -19,6 +18,7 @@ pub struct CSS {
     pub(crate) header_padding: UiRect, // depends on @media(min-width)
     pub(crate) fira_sans: Handle<Font>,
     pub(crate) github_img_height: Val, // depends on @media(min-width)
+    pub(crate) main_menu_link_font_size: f32, // navbar becomes hamburger menu on small screens
 }
 
 impl Default for CSS {
@@ -31,6 +31,7 @@ impl Default for CSS {
             header_padding: UiRect::right(Val::Px(8.)),
             fira_sans: Handle::default(),
             github_img_height: Val::Px(35.),
+            main_menu_link_font_size: 1.3 * 19.5, // FIXME 1.3 * rem
         }
     }
 }
@@ -187,7 +188,7 @@ impl CSS {
                 // }
                 Styles {
                     style: Style {
-                        margin: UiRect::left(Val::Px(12.)),
+                        margin: UiRect::left(Val::Px(11.)),
                         ..default()
                     },
                     text: TextBundle {
@@ -227,7 +228,7 @@ impl CSS {
                             "",
                             TextStyle {
                                 font: self.fira_sans.clone(),
-                                font_size: 1.3 * self.rem,
+                                font_size: self.main_menu_link_font_size,
                                 color: Srgba::hex("#ececec").unwrap().into(),
                                 ..default()
                             }
@@ -290,7 +291,7 @@ impl CSS {
                     style: Style {
                         align_items: AlignItems::Center,
                         border: UiRect::all(Val::Px(3.)),
-                        padding: UiRect::px(8., 8., 6., 6.),
+                        padding: UiRect::px(7., 7., 5.5, 6.5),
                         ..default()
                     },
                     ..default()
@@ -306,7 +307,7 @@ impl CSS {
                 // }
                 Styles {
                     style: Style {
-                        height: Val::Px(1.1 * 17.), // TODO define em
+                        height: Val::Px(1.1 * 17.4), // TODO define em
                         margin: UiRect::left(Val::Px(0.2 * self.rem)),
                         ..default()
                     },
@@ -423,7 +424,13 @@ pub(crate) fn recalculate(
     css.github_img_height = match width {
         w if w >= 768. => Val::Px(35.),
         _ => Val::Px(30.),
-    }
+    };
+
+    css.main_menu_link_font_size = match width {
+        w if w >= 992. => 1.3 * css.rem,
+        // FIXME -- scale to 0 here to simulate navbar collapsing to hamburger menu in CSS
+        _ => 0.
+    };
 }
 
 pub(crate) fn a_hover(
@@ -455,13 +462,11 @@ pub(crate) fn a_hover(
 }
 
 pub(crate) fn main_menu_link_hover(
-    link_interaction: Query<(&Interaction, &Children, &css::Classes), Changed<Interaction>>,
+    link_interaction: Query<(&Interaction, &Children, &Classes), Changed<Interaction>>,
     mut query_text: Query<&mut Text>,
 ) {
     for (interaction, children, classes) in link_interaction.iter() {
-        if !classes.0.contains(&css::Class::MainMenuLink) { continue; }
-
-        info!("user interacted with a MainMenuLink OR window was just re-rendered due to resizing");
+        if !classes.0.contains(&Class::MainMenuLink) { continue; }
 
         let hovered_color = Srgba::hex("#b1d9ff").unwrap().into();
         let normal_color = Srgba::hex("#ececec").unwrap().into();
@@ -484,6 +489,32 @@ pub(crate) fn main_menu_link_hover(
         }
     }
 }
+
+pub(crate) fn button_pink_hover(
+    mut link_interaction: Query<(&Interaction, &mut UiImage, &Classes), Changed<Interaction>>,
+) {
+    for (interaction, mut background_color, classes) in link_interaction.iter_mut() {
+        if !classes.0.contains(&Class::ButtonPink) { continue; }
+
+        let hovered_color = Srgba::hex("#954c72").unwrap().into();
+        let normal_color = Srgba::hex("#9f517a").unwrap().into();
+
+        match interaction {
+            Interaction::Hovered | Interaction::Pressed => {
+                *background_color = UiImage::default().with_color(hovered_color);
+            }
+            Interaction::None => {
+                *background_color = UiImage::default().with_color(normal_color);
+            }
+        }
+    }
+}
+
+/*
+.header__cta--github:hover {
+    filter: brightness(80%);
+}
+ */
 
 // ---
 

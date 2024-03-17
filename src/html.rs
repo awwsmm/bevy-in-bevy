@@ -58,7 +58,7 @@ pub(crate) fn text(
     classes: css::Classes,
     text: &str,
 ) {
-    let mut bundle = TextBundle::cascade(css, &classes);
+    let bundle = TextBundle::cascade(css, &classes);
     parent.spawn((
         TextBundle {
             style: Style::cascade(css, &classes),
